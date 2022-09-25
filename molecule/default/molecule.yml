@@ -1,0 +1,33 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: libvirt
+platforms:
+  - name: gitlab
+    vcpu: 2
+    cpu_model: "qemu64"
+    image_volume: /dev/sda1
+    image_url: "http://localhost:8080/redos.qcow2"
+    disk_size: "25G"
+    ssh_port: 22
+    memory_size: "4" # in G
+    qemu_user: libvirt-qemu
+provisioner:
+  name: ansible
+verifier:
+  name: ansible
+scenario:
+  test_sequence:
+    - dependency
+    - lint
+    - cleanup
+    - destroy
+    - syntax
+    - create
+    - prepare
+    - converge
+    - side_effect
+    - verify
+    - cleanup
+    - destroy

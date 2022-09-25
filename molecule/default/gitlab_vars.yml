@@ -1,0 +1,2 @@
+gitlab_repository_baseurl: "http://boooke.local:8080/gitlab_gitlab-ce"
+gitlab_repository_gpgcheck: no
