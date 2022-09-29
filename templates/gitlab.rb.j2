@@ -97,6 +97,19 @@ registry_nginx['ssl_certificate'] = "{{ gitlab_registry_nginx_ssl_certificate }}
 registry_nginx['ssl_certificate_key'] = "{{ gitlab_registry_nginx_ssl_certificate_key }}"
 {% endif %}
 
+{% if gitlab_db_external %}
+# Disable the built-in Postgres
+postgresql['enable'] = false
+
+# Fill in the connection details for database.yml
+gitlab_rails['db_adapter'] = 'postgresql'
+gitlab_rails['db_encoding'] = 'utf8'
+gitlab_rails['db_host'] = "{{ gitlab_db_host }}"
+gitlab_rails['db_port'] = "{{ gitlab_db_port }}"
+gitlab_rails['db_username'] = "{{ gitlab_db_username }}"
+gitlab_rails['db_password'] = "{{ gitlab_db_password }}"
+{% endif %}
+
 {% if gitlab_extra_settings is defined %}
 # Extra configuration
 {% for extra in gitlab_extra_settings %}

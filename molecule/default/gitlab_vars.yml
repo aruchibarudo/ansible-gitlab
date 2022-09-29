@@ -1,2 +1,13 @@
 gitlab_repository_baseurl: "http://boooke.local:8080/gitlab_gitlab-ce"
 gitlab_repository_gpgcheck: no
+gitlab_external_url: http://gitlab.local
+#gitlab_init_password:
+
+# PostgreSQL config
+gitlab_db_external: yes
+gitlab_db_host: boooke.local
+gitlab_db_port: 15432
+gitlab_db_username: gitlab
+gitlab_db_password: gitP@ssw0rdlab
+use_proxy: no
+proxy: http://locahost:22200

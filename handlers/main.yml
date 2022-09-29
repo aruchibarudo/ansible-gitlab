@@ -3,3 +3,9 @@
   command: gitlab-ctl reconfigure
   register: gitlab_restart
   failed_when: gitlab_restart_handler_failed_when | bool
+
+- name: seed database
+  shell: yes yes | gitlab-rake gitlab:setup
+  when:
+  - not gitlab_file.stat.exists
+  - gitlab_db_external | bool

@@ -58,7 +58,7 @@ gitlab_dependencies:
   - libxcrypt-compat
 
 # Optional settings.
-gitlab_time_zone: "UTC"
+gitlab_time_zone: "Europe/Moscow"
 gitlab_backup_keep_time: "604800"
 gitlab_download_validate_certs: true
 gitlab_default_theme: '2'
@@ -83,7 +83,19 @@ gitlab_letsencrypt_auto_renew_minute: 30
 gitlab_letsencrypt_auto_renew_day_of_month: "*/7"
 gitlab_letsencrypt_auto_renew: true
 
+# PostgreSQL config
+gitlab_db_external: no
+gitlab_db_host: localhost
+gitlab_db_port: 5432
+gitlab_db_username: gitlab
+gitlab_db_password: # set password for DB
+
 # RHEL based os family
 RHEL:
 - RedHat
 - RED
+
+# Proxy config
+use_proxy: no
+proxy:
+no_proxy: .local

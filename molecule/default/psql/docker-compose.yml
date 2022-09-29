@@ -1,0 +1,13 @@
+version: '3.1'
+
+services:
+
+  db:
+    image: postgres:13
+    ports:
+      - 15432:5432
+    environment:
+      POSTGRES_PASSWORD: gitP@ssw0rdlab
+      POSTGRES_USER: gitlab
+      POSTGRES_HOST_AUTH_METHOD: md5
+      #POSTGRES_DB: gitlabhq_production

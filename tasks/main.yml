@@ -15,18 +15,27 @@
   package:
     name: "{{ gitlab_dependencies }}"
     state: present
+  when:
+  - not gitlab_file.stat.exists
 
 - name: Install GitLab dependencies (Debian).
   apt:
     name: gnupg2
     state: present
-  when: ansible_os_family == 'Debian'
+  when:
+  - ansible_os_family == 'Debian'
+  - not gitlab_file.stat.exists
 
 - name: Download GitLab repository installation script.
   get_url:
     url: "{{ gitlab_repository_installation_script_url }}"
     dest: /tmp/gitlab_install_repository.sh
     validate_certs: "{{ gitlab_download_validate_certs }}"
+    use_proxy: "{{ use_proxy | default(omit) }}"
+  environment:
+    http_proxy: "{{ proxy | default(omit) }}"
+    https_proxy: "{{ proxy | default(omit) }}"
+    no_proxy: "{{ no_proxy | default(omit) }}"
   when:
   - not gitlab_file.stat.exists
   - not gitlab_repository_installation_url is defined
@@ -42,6 +51,11 @@
   get_url:
     url: "{{ gitlab_repository_installation_url }}"
     dest: "{{ repofile }}"
+    use_proxy: "{{ use_proxy | default(omit) }}"
+  environment:
+    http_proxy: "{{ proxy | default(omit) }}"
+    https_proxy: "{{ proxy | default(omit) }}"
+    no_proxy: "{{ no_proxy | default(omit) }}"
   when:
   - not gitlab_file.stat.exists
   - gitlab_repository_installation_url is defined
@@ -57,6 +71,21 @@
   - not gitlab_file.stat.exists
   - gitlab_repository_baseurl is defined
   - ansible_os_family in RHEL
+
+- name: Config proxy for repository
+  community.general.ini_file:
+    path: /etc/yum.repos.d/gitlab.repo
+    section: "gitlab_{{ gitlab_edition }}"
+    option: proxy
+    value: "{{ proxy }}"
+    state: "{{ use_proxy | default(false) | ternary('present', 'absent') }}"
+
+- name: Diasble gitlab source repository
+  community.general.ini_file:
+    path: /etc/yum.repos.d/gitlab.repo
+    section: "gitlab_{{ gitlab_edition }}-source"
+    option: enabled
+    value: "0"
 
 - name: Define the Gitlab package name.
   set_fact:
@@ -102,4 +131,6 @@
     owner: root
     group: root
     mode: 0600
-  notify: restart gitlab
+  notify:
+  - seed database
+  - restart gitlab
