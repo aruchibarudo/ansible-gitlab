@@ -39,6 +39,7 @@ no_proxy: .local
 ## Playbook example
 ```yaml
 - hosts: servers
+    become: yes
     vars_files:
     - gitlab-devzone.yml
     roles:
