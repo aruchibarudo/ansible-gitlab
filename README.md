@@ -30,6 +30,11 @@ gitlab_ssl_certificate_key: "/etc/gitlab/ssl/gitlab.key"
 
 # Gitlab timezone.
 gitlab_time_zone: "Europe/Moscow"
+
+# Настройка proxy
+use_proxy: yes
+proxy: http://proxy.local:3128
+no_proxy: .local
 ```
 ## Playbook example
 ```yaml
