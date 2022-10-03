@@ -100,11 +100,11 @@
   poll: 5
   when: not gitlab_file.stat.exists
 
-- name: Start gitlab service
-  systemd:
-    name: gitlab-runsvdir
-    state: started
-    enabled: yes
+#- name: Start gitlab service
+#  systemd:
+#    name: gitlab-runsvdir
+#    state: started
+#    enabled: yes
 # Start and configure GitLab. Sometimes the first run fails, but after that,
 # restarts fix problems, so ignore failures on this run.
 - name: Reconfigure GitLab (first run).
@@ -137,5 +137,16 @@
     group: root
     mode: 0600
   notify:
-  - seed database
   - restart gitlab
+
+- meta: flush_handlers
+
+- name: Seed database
+  shell: yes yes | gitlab-rake gitlab:setup
+  when:
+  - not gitlab_file.stat.exists
+  - gitlab_db_external | bool
+  notify:
+  - restart gitlab
+
+
