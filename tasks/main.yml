@@ -100,6 +100,11 @@
   poll: 5
   when: not gitlab_file.stat.exists
 
+- name: Start gitlab service
+  systemd:
+    name: gitlab-runsvdir
+    state: started
+    enabled: yes
 # Start and configure GitLab. Sometimes the first run fails, but after that,
 # restarts fix problems, so ignore failures on this run.
 - name: Reconfigure GitLab (first run).
