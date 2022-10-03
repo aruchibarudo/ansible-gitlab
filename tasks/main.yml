@@ -82,7 +82,7 @@
 
 - name: Diasble gitlab source repository
   community.general.ini_file:
-    path: /etc/yum.repos.d/gitlab.repo
+    path: "{{ repofile }}"
     section: "gitlab_{{ gitlab_edition }}-source"
     option: enabled
     value: "0"
