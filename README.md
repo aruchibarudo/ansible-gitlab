@@ -49,6 +49,25 @@ no_proxy: .local
 ```yaml
 gitlab_external_url: "https://gitlab.example.com/"
 ```
+
+## Cleanup
+```shell
+systemctl stop gitlab-runsvdir
+systemctl disable gitlab-runsvdir
+rm -f /usr/lib/systemd/system/gitlab-runsvdir.service
+systemctl daemon-reload
+
+dnf remove gitlab-ce
+rm -rf /opt/gitlab/ && \
+rm -rf /var/opt/gitlab/ && \
+rm -rf /etc/gitlab/gitlab* /etc/gitlab/initial_root_password  /etc/gitlab/trusted-certs/ && \
+rm -rf /var/log/gitlab/ && \
+rm -rf /app/gitlab/git-data/ && \
+rm -rf /app/gitlab-backup/*
+
+# on database server
+drop database gitlabhq_production;
+```
 ## License
 
 MIT / BSD
